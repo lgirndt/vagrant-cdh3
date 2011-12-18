@@ -1,5 +1,6 @@
-Exec { path => "/bin:/sbin:/usr/bin:/usr/sbin" }
 include apt
+
+Exec { path => "/bin:/sbin:/usr/bin:/usr/sbin" }
 
 group { "puppet":
   ensure => "present"
@@ -11,7 +12,8 @@ apt::sources_list { "partner":
 }
 
 class {'java':
-	require => Apt::Sources_list['partner']
+	require => Exec["apt-get_update"]
 }
 
-class {'hadoop':}
+class {'hadoop':
+}

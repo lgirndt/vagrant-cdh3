@@ -3,25 +3,26 @@ class hadoop {
 	$hadoop_version = '0.20'
 	$hadoop_name = "hadoop-${hadoop_version}"
 	
+	apt::key {'02A818DD':
+		source => 'http://archive.cloudera.com/debian/archive.key',		
+	}	
+	
 	apt::sources_list { "cdh3":
 		ensure => present,
 		content => "deb http://archive.cloudera.com/debian lucid-cdh3 contrib",		
-	}
-
-	apt::key {'02A818DD':
-		source => 'http://archive.cloudera.com/debian/archive.key',
-		require => Apt::Sources_list['cdh3']
+		require => Apt::Key['02A818DD'],
 	}
 	
 	package { "hadoop":
 	  name => "${hadoop_name}",
 		ensure => present,
-		require => Apt::Sources_list['cdh3']	
+		require => Class['java']
 	}
 	
 	package {'hadoop-conf':
 		name => "${hadoop_name}-conf-pseudo",
-		ensure => present
+		ensure => present,
+		require => Package['hadoop']
 	}	
 	
 	file { 'mapred-site.xml':
