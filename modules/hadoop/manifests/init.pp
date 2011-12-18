@@ -32,6 +32,13 @@ class hadoop {
 		source => 'puppet:///modules/hadoop/mapred-site.xml'
 	}
 	
+	file { 'core-site.xml':
+		path => '/etc/hadoop/conf/core-site.xml',
+		ensure => file,
+		require => Package['hadoop-conf'], # maybe just hadoop...
+		source => 'puppet:///modules/hadoop/core-site.xml'		
+	}
+	
 	define daemon(
 		$daemon = $title
 	){
@@ -48,7 +55,7 @@ class hadoop {
 			name   => "${hadoop_name}-${daemon}",
 			ensure => running,
 			enable => true,
-			subscribe => File['mapred-site.xml']
+			subscribe => File['mapred-site.xml','core-site.xml']
 		}
 	} 
 	
