@@ -26,6 +26,11 @@ Vagrant::Config.run do |config|
     puppet.manifest_file  = "base.pp"
   end
   
-  config.vm.share_folder "v-data", "/manifests", "manifests"
+  config.vm.customize do |vm|
+    vm.memory_size = 800
+    vm.cpu_count = 4
+  end
+  
+  config.vm.share_folder "me", "/Users/lgirndt", "/Users/lgirndt"
 
 end
